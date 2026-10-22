@@ -32,7 +32,9 @@ export default function Navbar() {
           }
         })
       },
-      { threshold: 0.4 }
+      // Trigger when a section crosses the viewport's vertical center, so tall/pinned
+      // sections (e.g. Work) still toggle dark mode instead of needing 40% visible area.
+      { rootMargin: '-50% 0px -50% 0px', threshold: 0 }
     )
     sections.forEach(s => {
       const el = document.getElementById(s.id)

@@ -144,6 +144,7 @@ export default function Work() {
   const inView = useInView(ref, { once: true, margin: '-80px' })
   const [progress, setProgress] = useState(0)
   const [trackWidth, setTrackWidth] = useState(0)
+  const [isPinned, setIsPinned] = useState(false)
 
   // Pin the card scroller while scrolling through it; release once the last card has passed.
   const { scrollYProgress } = useScroll({
@@ -167,6 +168,7 @@ export default function Work() {
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     const idx = Math.min(projects.length - 1, Math.round(v * (projects.length - 1)))
     setProgress(idx)
+    setIsPinned(v > 0.001 && v < 0.999)
   })
 
   return (
@@ -175,7 +177,11 @@ export default function Work() {
       <div ref={pinRef} className="relative" style={{ height: `${projects.length * 70}vh` }}>
         <div className="sticky top-0 h-screen flex flex-col overflow-hidden">
           {/* Header */}
-          <div className="flex items-center gap-4 px-8 py-5 border-b border-cream/10">
+          <div
+            className={`flex items-center gap-4 px-8 py-5 border-b transition-colors duration-500 ${
+              isPinned ? 'bg-ink-soft border-red/20' : 'bg-transparent border-cream/10'
+            }`}
+          >
             <span className="font-mono text-xs text-red tracking-widest">03</span>
             <span className="w-8 h-px bg-cream/20" />
             <span className="font-mono text-xs tracking-widest text-cream/40 uppercase">Work</span>
@@ -188,13 +194,6 @@ export default function Work() {
               {projects.map((p, i) => (
                 <WorkCard key={p.num} p={p} index={i} inView={inView} />
               ))}
-
-              {/* End cap */}
-              <div className="work-card items-center justify-center opacity-30 min-w-[200px]">
-                <p className="font-display italic text-cream text-xl text-center leading-snug">
-                  More projects<br />on request
-                </p>
-              </div>
             </motion.div>
           </div>
 
