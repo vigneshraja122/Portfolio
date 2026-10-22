@@ -7,7 +7,7 @@ const milestones = [
   {
     year: '2017–20',
     title: 'Bachelor of Computer Application',
-    desc: 'NMS S. Vellaichamy Nadar College, Madurai — CGPA 5.85. Laid the groundwork in programming fundamentals and computer applications.',
+    desc: 'NMS S. Vellaichamy Nadar College, Madurai. Laid the groundwork in programming fundamentals and computer applications.',
   },
   {
     year: '2020–22',
@@ -15,14 +15,14 @@ const milestones = [
     desc: 'Karpagam Academy of Higher Education, Coimbatore — CGPA 8.72. Built the foundation in software engineering and computer science.',
   },
   {
-    year: '2023–25',
+    year: 'Jul 2023 – Feb 2025',
     title: 'Frontend Developer, Semanticverse AI',
-    desc: 'Joined Semanticverse AI Pvt Ltd in Bengaluru (Jul 2023 – Feb 2025). Built front-end for AI-powered legal tools: judgment summarizer, timeline generator, and a chat assistant with source verification using React.js.',
+    desc: 'Joined Semanticverse AI Pvt Ltd in Bengaluru. Built front-end for AI-powered legal tools: judgment summarizer, timeline generator, and a chat assistant with source verification using React.js and Next.js.',
   },
   {
-    year: '2025–Now',
+    year: 'Mar 2025 – Present',
     title: 'Frontend Developer, Sportstech.de — Germany',
-    desc: 'Joined Beeyoond Gaming / Sportstech (Nov 2025 – Present). Shipped the WalkingPad Vergleich affiliate site, Sportstech NEO landing page, Sportstech.io Web3 platform, Beeyoond Gaming\'s company website, and Shopify storefront work with an automated Wrike → Figma → Shopify pipeline.',
+    desc: 'Joined Beeyoond Gaming / Sportstech. Shipped the WalkingPad Vergleich affiliate site, Sportstech NEO landing page, Sportstech.io Web3 platform, Beeyoond Gaming\'s company website, and Shopify storefront work with an automated Wrike → Figma → Shopify pipeline.',
   },
 ]
 
@@ -57,8 +57,8 @@ export default function Story() {
         <div>
           <p className="text-muted text-sm md:text-base leading-relaxed mb-8 max-w-md">
             Front-End Developer with 3+ years of experience building responsive
-            web applications and immersive, scroll-driven experiences —
-            focused on scalable, high-performance, user-first solutions.
+            web applications and Shopify storefronts — focused on scalable,
+            high-performance, user-first solutions.
           </p>
           <div className="grid grid-cols-2 gap-8">
             <div>
@@ -68,7 +68,7 @@ export default function Story() {
               <ul className="flex flex-col gap-2 text-sm text-ink">
                 <li>React.js &amp; Next.js</li>
                 <li>Shopify Liquid &amp; Hydrogen</li>
-                <li>GSAP &amp; Three.js</li>
+                <li>Claude AI &amp; n8n Workflows</li>
               </ul>
             </div>
             <div>
@@ -94,7 +94,7 @@ export default function Story() {
       {/* Timeline */}
       <div className="max-w-4xl mx-auto relative">
         {/* Vertical red border line */}
-        <div className="absolute left-28 top-0 bottom-0 w-px bg-red/20" />
+        <div className="absolute left-36 md:left-40 top-0 bottom-0 w-px bg-red/20" />
 
         <div className="flex flex-col gap-0">
           {milestones.map((m, i) => (
@@ -106,8 +106,8 @@ export default function Story() {
               className="flex gap-0 group"
             >
               {/* Year */}
-              <div className="w-28 shrink-0 pt-6 pr-6 text-right">
-                <span className="font-display font-bold text-red text-2xl select-none">
+              <div className="w-36 md:w-40 shrink-0 pt-6 pr-6 text-right">
+                <span className="font-display font-bold text-red text-lg md:text-xl leading-tight select-none">
                   {m.year}
                 </span>
               </div>

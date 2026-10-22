@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { useRef, useState, useEffect } from 'react'
+import { motion, useInView, useScroll, useTransform, useMotionValueEvent } from 'framer-motion'
 
 const alsoBuilt = [
   {
@@ -139,73 +139,88 @@ function WorkCard({ p, index, inView }) {
 
 export default function Work() {
   const ref = useRef(null)
-  const scrollRef = useRef(null)
+  const pinRef = useRef(null)
+  const trackRef = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
   const [progress, setProgress] = useState(0)
+  const [trackWidth, setTrackWidth] = useState(0)
 
-  const handleScroll = () => {
-    const el = scrollRef.current
-    if (!el) return
-    const max = el.scrollWidth - el.clientWidth
-    const idx = max > 0 ? Math.round((el.scrollLeft / max) * (projects.length - 1)) : 0
+  // Pin the card scroller while scrolling through it; release once the last card has passed.
+  const { scrollYProgress } = useScroll({
+    target: pinRef,
+    offset: ['start start', 'end end'],
+  })
+
+  useEffect(() => {
+    const measure = () => {
+      if (trackRef.current) {
+        setTrackWidth(trackRef.current.scrollWidth - window.innerWidth)
+      }
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [])
+
+  const x = useTransform(scrollYProgress, [0, 1], [0, -trackWidth])
+
+  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    const idx = Math.min(projects.length - 1, Math.round(v * (projects.length - 1)))
     setProgress(idx)
-  }
+  })
 
   return (
     <section id="work" data-dark="true" className="section-dark" ref={ref}>
-      {/* Header */}
-      <div className="flex items-center gap-4 px-8 py-5 border-b border-cream/10">
-        <span className="font-mono text-xs text-red tracking-widest">03</span>
-        <span className="w-8 h-px bg-cream/20" />
-        <span className="font-mono text-xs tracking-widest text-cream/40 uppercase">Work</span>
-      </div>
+      {/* Pinned horizontal card scroller */}
+      <div ref={pinRef} className="relative" style={{ height: `${projects.length * 70}vh` }}>
+        <div className="sticky top-0 h-screen flex flex-col overflow-hidden">
+          {/* Header */}
+          <div className="flex items-center gap-4 px-8 py-5 border-b border-cream/10">
+            <span className="font-mono text-xs text-red tracking-widest">03</span>
+            <span className="w-8 h-px bg-cream/20" />
+            <span className="font-mono text-xs tracking-widest text-cream/40 uppercase">Work</span>
+          </div>
 
-      {/* Scrollable horizontal cards */}
-      <div
-        ref={scrollRef}
-        onScroll={handleScroll}
-        className="flex overflow-x-auto"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        <style>{`#work ::-webkit-scrollbar { display: none; }`}</style>
+          {/* Scroll-driven horizontal track */}
+          <div className="flex-1 overflow-hidden">
+            <style>{`#work ::-webkit-scrollbar { display: none; }`}</style>
+            <motion.div ref={trackRef} className="flex h-full" style={{ x }}>
+              {projects.map((p, i) => (
+                <WorkCard key={p.num} p={p} index={i} inView={inView} />
+              ))}
 
-        {projects.map((p, i) => (
-          <WorkCard key={p.num} p={p} index={i} inView={inView} />
-        ))}
+              {/* End cap */}
+              <div className="work-card items-center justify-center opacity-30 min-w-[200px]">
+                <p className="font-display italic text-cream text-xl text-center leading-snug">
+                  More projects<br />on request
+                </p>
+              </div>
+            </motion.div>
+          </div>
 
-        {/* End cap */}
-        <div className="work-card items-center justify-center opacity-30 min-w-[200px]">
-          <p className="font-display italic text-cream text-xl text-center leading-snug">
-            More projects<br />on request
-          </p>
+          {/* Scroll hint + progress */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.8 }}
+            className="px-8 py-4 border-t border-cream/10 flex items-center justify-between gap-3"
+          >
+            <span className="font-mono text-xs text-cream/30 tracking-widest">
+              ↓ KEEP SCROLLING TO EXPLORE
+            </span>
+            <div className="flex items-center gap-3 font-mono text-xs text-red tracking-widest">
+              <span>{String(progress + 1).padStart(2, '0')}</span>
+              <span className="w-16 h-px bg-cream/20 relative overflow-hidden">
+                <span
+                  className="absolute inset-y-0 left-0 bg-red"
+                  style={{ width: `${((progress + 1) / projects.length) * 100}%` }}
+                />
+              </span>
+              <span>{String(projects.length).padStart(2, '0')}</span>
+            </div>
+          </motion.div>
         </div>
       </div>
-
-      {/* Scroll hint + progress */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{ delay: 0.8 }}
-        className="px-8 py-4 border-t border-cream/10 flex items-center justify-between gap-3"
-      >
-        <motion.span
-          className="font-mono text-xs text-cream/30 tracking-widest"
-          animate={{ x: [0, 12, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          → SCROLL TO EXPLORE
-        </motion.span>
-        <div className="flex items-center gap-3 font-mono text-xs text-red tracking-widest">
-          <span>{String(progress + 1).padStart(2, '0')}</span>
-          <span className="w-16 h-px bg-cream/20 relative overflow-hidden">
-            <span
-              className="absolute inset-y-0 left-0 bg-red"
-              style={{ width: `${((progress + 1) / projects.length) * 100}%` }}
-            />
-          </span>
-          <span>{String(projects.length).padStart(2, '0')}</span>
-        </div>
-      </motion.div>
 
       {/* Also built */}
       <div className="px-8 py-16 border-t border-cream/10">
