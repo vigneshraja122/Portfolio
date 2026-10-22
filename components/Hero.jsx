@@ -144,8 +144,8 @@ export default function Hero() {
               style={{ fontSize: 'clamp(1.4rem, 3.5vw, 2.6rem)' }}
             >
               I build responsive web apps,<br />
-              immersive 3D experiences,<br />
-              and Shopify storefronts.
+              Shopify storefronts, and<br />
+              AI-powered dev workflows.
             </p>
           </motion.div>
 
@@ -157,15 +157,16 @@ export default function Hero() {
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
           >
             <p className="text-muted text-sm md:text-base leading-relaxed mb-6 max-w-md">
-              3+ years building responsive web applications and immersive 3D,
-              scroll-driven experiences with React, Next.js and Three.js — plus
-              Shopify (Liquid &amp; Hydrogen) and Shopware storefront work.
+              3+ years building high-performance web applications with React,
+              Next.js, and Three.js — plus Shopify (Liquid, Hydrogen &amp; B2B),
+              Shopware, and AI-assisted automation with Claude and n8n.
             </p>
             <div className="flex flex-col gap-2 font-mono text-xs tracking-widest text-ink uppercase">
               {[
                 'Frontend Developer, Sportstech.de',
-                'Shopify Liquid · Hydrogen · Oxygen',
-                'Madurai, Tamil Nadu, India',
+                'React · Next.js · Shopify · Shopware',
+                'Shopify Liquid · Hydrogen · B2B · Oxygen',
+                'AI Workflows · Claude · n8n · Groq AI',
               ].map((item) => (
                 <div key={item} className="flex items-center gap-3">
                   <span className="red-dot" />
